@@ -35,12 +35,6 @@ public class UploadController {
 	@Autowired
 	private GalleryRepo galleryRepo;
 	
-	@GetMapping("/upload")
-	public String getUploadForm(){
-		return "upload";
-		
-	}
-	
 	@PostMapping("/upload/{galleryId:.+}")
 	public String handleFileUpload(@RequestParam("file") MultipartFile file, Authentication authentication, @PathVariable Long galleryId) throws Exception
 	{

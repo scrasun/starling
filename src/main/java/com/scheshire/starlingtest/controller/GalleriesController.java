@@ -3,6 +3,8 @@ package com.scheshire.starlingtest.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -54,16 +56,19 @@ public class GalleriesController {
 	@GetMapping("/gallery/{galleryId:.+}")
 	public String getGallery(Model model, Authentication authentication, @PathVariable Long galleryId)
 	{
-		Gallery gallery = galleryRepo.getOne(galleryId);
-		User user = userRepo.findByEmail(authentication.getName());
-		model.addAttribute("gallery", galleryId);
-		
-		if (gallery.getUser().equals(user))
+		if (!galleryRepo.existsById(galleryId))
 		{
+			Map<String, String> images = new HashMap<String, String>();
 			model.addAttribute("editable", true);
+			model.addAttribute("images", images);
+			model.addAttribute("gallery", galleryId);
+			return "gallery";
 		}
 		
+		Gallery gallery = galleryRepo.getOne(galleryId);
+
 		Map<String, String> images = new HashMap<String, String>();
+		
 		for (Image image : gallery.getImages())
 		{
 			System.out.println("image!");
@@ -71,6 +76,19 @@ public class GalleriesController {
 		}
 		
 		model.addAttribute("images", images);
+		model.addAttribute("gallery", galleryId);
+		
+		if (authentication == null)
+		{
+			return "gallery";
+		}
+
+		User user = userRepo.findByEmail(authentication.getName());
+		
+		if (gallery.getUser().equals(user))
+		{
+			model.addAttribute("editable", true);
+		}
 		
 		return "gallery";
 	}

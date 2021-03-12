@@ -1,0 +1,12 @@
+.img-container img 
+{
+	max-width: 100vh;
+	max-height: 100vh;
+	cursor: pointer;
+}
+
+.thumb
+{
+	width: 100px;
+	height: 100px;
+}
