@@ -7,11 +7,11 @@
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/webjars/cropperjs/dist/cropper.min.js"></script>
-    <script type="text/javascript" src="/gallery.js" />
+    <script type="text/javascript" src="/gallery.js"></script>
+    <link href="/webjars/cropperjs/dist/cropper.min.css" rel="stylesheet">
     <style>
-    #upload {
-    width: 500px;
-    height: 500px;
+    #image-upload {
+    max-width: 100%;
     }
     </style>
 </head>
@@ -24,8 +24,29 @@
 	
 		<form method="POST" enctype="multipart/form-data" th:action="@{'/upload/' + ${gallery}}" th:if="${editable}">
 		File to upload:<input id="file" type="file" name="file" />
-				<img src="" id="upload" width="500" height="500" />
 				<input type="submit" value="Upload" />
 		</form>
+		
+   <div class="modal fade" id="modal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Crop The Image</h4>
+        </div>
+        <div class="modal-body">
+          <div class="image-container">
+          	<img id="image-upload" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
 </body>
 </html>
