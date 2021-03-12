@@ -25,57 +25,22 @@ import com.scheshire.starlingtest.repo.ImageRepo;
 import com.scheshire.starlingtest.repo.UserRepo;
 
 @Controller
-public class UploadController {
+public class ImageFileController {
 	@Autowired
 	private ImageStore imageStore;
 	@Autowired
-	private UserRepo userRepo;
-	@Autowired
 	private ImageRepo imageRepo;
-	@Autowired
-	private GalleryRepo galleryRepo;
 	
-	@PostMapping("/upload/{galleryId:.+}")
-	public String handleFileUpload(@RequestParam("file") MultipartFile file, Authentication authentication, @PathVariable Long galleryId) throws Exception
-	{
-		try
-		{
-		User user = userRepo.findByEmail(authentication.getName());
-		Gallery gallery = galleryRepo.getOne(galleryId);
-		if (gallery == null)
-		{
-			throw new Exception("not a gallery");
-		}
-		if (!gallery.getUser().equals(user))
-		{
-			throw new Exception("not your gallery");
-		}
-		
-		Image img = imageStore.saveImage(file, gallery);
-		System.out.println(img.toString());
-		}
-		catch (Exception e)
-		{
-			System.out.println(e);
-			throw e;
-		}
-
-		return "upload";
-	}
-	
-	@GetMapping("/images/{filename:.+}")
+	@GetMapping("/images/{imageId:.+}")
 	@ResponseBody
-	public ResponseEntity<Resource> serveFile(@PathVariable String filename) throws Exception {
-		Image example = new Image();
-		example.setFile(filename);
-		Optional<Image> image = imageRepo.findOne(Example.of(example));
-		
-		if (image.isEmpty())
+	public ResponseEntity<Resource> serveImage(@PathVariable Long imageId) throws Exception {
+		if (!imageRepo.existsById(imageId))
 		{
 			return ResponseEntity.notFound().build();
 		}
+		Image image = imageRepo.getOne(imageId);
 
-		Resource file = imageStore.loadImage(image.get());
+		Resource file = imageStore.loadImage(image);
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment").body(file);
 	}
 }

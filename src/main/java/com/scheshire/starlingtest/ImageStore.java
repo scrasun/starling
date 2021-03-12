@@ -42,6 +42,17 @@ public class ImageStore {
 		rootLocation = Paths.get(path);
 		Files.createDirectories(rootLocation);
 	}
+	
+	public void deleteImage(Image image) throws IOException
+	{
+		Files.deleteIfExists(getFileName(image));
+		if (image.getThumbnail() != null)
+		{
+			Files.deleteIfExists(getFileName(image.getThumbnail()));
+			imageRepo.delete(image.getThumbnail());
+		}
+		imageRepo.delete(image);
+	}
 
 	public Image saveImage(MultipartFile file, Gallery gallery) throws Exception {
 		Image image = new Image();

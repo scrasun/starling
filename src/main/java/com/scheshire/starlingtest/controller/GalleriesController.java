@@ -2,6 +2,7 @@ package com.scheshire.starlingtest.controller;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -12,6 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.scheshire.starlingtest.dto.GalleryInfo;
+import com.scheshire.starlingtest.dto.ImageInfo;
 import com.scheshire.starlingtest.models.Gallery;
 import com.scheshire.starlingtest.models.Image;
 import com.scheshire.starlingtest.models.User;
@@ -28,13 +31,7 @@ public class GalleriesController {
 	@GetMapping("/galleries")
 	public String getAll(Model model)
 	{
-		Map<Long, String> galleries = new HashMap<Long, String>();
-		for (Gallery gallery : galleryRepo.findAll())
-		{
-			galleries.put(gallery.getId(), gallery.getName());
-		}
-		
-		model.addAttribute("galleries", galleries);
+		model.addAttribute("galleries", galleryRepo.findAll().stream().map(GalleryInfo::new).collect(Collectors.toList()));
 		return "galleries";
 	}
 
@@ -43,28 +40,13 @@ public class GalleriesController {
 	{
 		User user = userRepo.findByEmail(authentication.getName());
 		
-		Map<Long, String> galleries = new HashMap<Long, String>();
-		for (Gallery gallery : user.getGalleries())
-		{
-			galleries.put(gallery.getId(), gallery.getName());
-		}
-		
-		model.addAttribute("galleries", galleries);
+		model.addAttribute("galleries", user.getGalleries().stream().map(GalleryInfo::new).collect(Collectors.toList()));
 		return "galleries";
 	}
 
 	@GetMapping("/gallery/{galleryId:.+}")
 	public String getGallery(Model model, Authentication authentication, @PathVariable Long galleryId)
 	{
-		if (!galleryRepo.existsById(galleryId))
-		{
-			Map<String, String> images = new HashMap<String, String>();
-			model.addAttribute("editable", true);
-			model.addAttribute("images", images);
-			model.addAttribute("gallery", galleryId);
-			return "gallery";
-		}
-		
 		Gallery gallery = galleryRepo.getOne(galleryId);
 
 		Map<String, String> images = new HashMap<String, String>();
@@ -75,7 +57,7 @@ public class GalleriesController {
 			images.put(image.getThumbnail() == null ? image.getFile() : image.getThumbnail().getFile(), image.getFile());
 		}
 		
-		model.addAttribute("images", images);
+		model.addAttribute("images", gallery.getImages().stream().map(ImageInfo::new).collect(Collectors.toList()));
 		model.addAttribute("gallery", galleryId);
 		
 		if (authentication == null)

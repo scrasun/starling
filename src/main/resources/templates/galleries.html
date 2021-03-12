@@ -9,7 +9,7 @@
 </head>
 <body>
 	<div th:each="entry : ${galleries}">
-		<a th:href="@{'/gallery/' + ${entry.key}}" th:text="${entry.value}"></a>
+		<a th:href="{entry.url}" th:text="${entry.name}"></a>
 	</div>
 </body>
 </html>
