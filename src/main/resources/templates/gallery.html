@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Gallery</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/css/bootstrap.min.css" />
+    <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/webjars/cropperjs/dist/cropper.min.js"></script>
+    <script type="text/javascript" src="/gallery.js" />
+    <style>
+    #upload {
+    width: 500px;
+    height: 500px;
+    }
+    </style>
+</head>
+<body>
+	<div th:each="entry : ${images}">
+		<a th:href="@{'/images/' + ${entry.value}}">
+			<img th:src="@{'/images/' + ${entry.key}}" />
+		</a>
+	</div>
+	
+		<form method="POST" enctype="multipart/form-data" th:action="@{'/upload/' + ${gallery}}" th:if="${editable}">
+		File to upload:<input id="file" type="file" name="file" />
+				<img src="" id="upload" width="500" height="500" />
+				<input type="submit" value="Upload" />
+		</form>
+</body>
+</html>
