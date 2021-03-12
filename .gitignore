@@ -27,3 +27,5 @@ target
 .classpath
 .project
 .factorypath
+image_store
+local_db*
