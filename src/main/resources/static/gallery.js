@@ -1,4 +1,6 @@
 jQuery(document).ready(() => {
+	
+// consts
 	var token = $('#_csrf').attr('content');
 var header = $('#_csrf_header').attr('content');
 
@@ -8,6 +10,7 @@ var $row = jQuery(".container .row");
 var $body = jQuery("body");
 var imageHtml = '<div class="col-sm-6 col-md-4 col-lg-3 text-center"><img class="thumb" /></div>';
 	
+	// open big image on click
 	jQuery(".container").on("click", ".thumb", function ()
 	{
 	      jQuery("#image-upload").attr("src", jQuery(this).attr("data-src"));
@@ -15,10 +18,12 @@ var imageHtml = '<div class="col-sm-6 col-md-4 col-lg-3 text-center"><img class=
 		
 	});
 	
+	// if-editable options:
 if (!$body.attr("data-editable"))
 {
 	return;
 }
+// Open modal on file upload
 	jQuery("#file").on("change", (e) => {
 	    var files = e.target.files;
 	    if (files && files.length > 0) {
@@ -30,6 +35,7 @@ if (!$body.attr("data-editable"))
         }
 	    });
 	
+	// Start cropper in modal
 	var cropper;
 	$modal.on('shown.bs.modal', function () {
 	      cropper = new Cropper($img[0],{
@@ -40,6 +46,7 @@ $modal.on('hidden.bs.modal', function () {
         cropper.destroy();
 		  jQuery("#delete").removeClass("d-none");
 });
+// Save on save button
 jQuery("#save").on("click", function ()
 {
 		cropper.getCroppedCanvas().toBlob((blob) => {
@@ -64,6 +71,7 @@ jQuery("#save").on("click", function ()
         $modal.modal('hide');
       });
 
+// Delete on delete button
 jQuery("#delete").on("click", function ()
 {
 			jQuery.ajax({
