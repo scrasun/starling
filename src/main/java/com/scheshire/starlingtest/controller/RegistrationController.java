@@ -3,6 +3,7 @@ package com.scheshire.starlingtest.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +19,10 @@ public class RegistrationController {
     private UserRepo userRepo;
 	
 	@GetMapping("")
-	public String showIndex()
-	{
+	public String showIndex(Model model, Authentication authentication)
+	{	
+		model.addAttribute("loggedin", authentication != null);
+		
 		return "index";
 	}
 	

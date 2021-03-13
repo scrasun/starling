@@ -10,7 +10,10 @@
 </head>
 <body>
     <div class="container text-center">
-        <h3><a href="/registration">Register</a></h3>
+        <h3><a href="/galleries">View Galleries</a></h3>
+        <h3 th:if="${loggedin}"><a href="/my-galleries">My Galleries</a></h3>
+        <h3 th:unless="${loggedin}"><a href="/registration">Register</a></h3>
+        <h3 th:unless="${loggedin}"><a href="/login">Login</a></h3>
     </div>
      
 </body>

@@ -6,7 +6,7 @@ var $modal = jQuery("#modal");
 var $img = jQuery("#image-upload");
 var $row = jQuery(".container .row");
 var $body = jQuery("body");
-var imageHtml = '<div class="col-sm-6 col-md-4 col-lg-3"><img class="thumb" /></div>';
+var imageHtml = '<div class="col-sm-6 col-md-4 col-lg-3 text-center"><img class="thumb" /></div>';
 	
 	jQuery(".container").on("click", ".thumb", function ()
 	{
