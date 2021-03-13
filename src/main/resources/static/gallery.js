@@ -3,20 +3,45 @@ jQuery(document).ready(() => {
 var header = $('#_csrf_header').attr('content');
 
 var $modal = jQuery("#modal");
-var $img = jQuery("#image-upload")
+var $img = jQuery("#image-upload");
+var $row = jQuery(".container .row");
+var $body = jQuery("body");
+var imageHtml = '<div class="col-sm-6 col-md-4 col-lg-3"><img class="thumb" /></div>';
 	
+	jQuery(".container").on("click", ".thumb", function ()
+	{
+	      jQuery("#image-upload").attr("src", jQuery(this).attr("data-src"));
+		  jQuery("#modal").modal("show");
+		
+	});
 	
+if (!$body.attr("data-editable"))
+{
+	return;
+}
 	jQuery("#file").on("change", (e) => {
 	    var files = e.target.files;
 	    if (files && files.length > 0) {
 	      var file = files[0];
 	      var url = URL.createObjectURL(file);
 	      $img.attr("src", url);
+		  jQuery("#delete").addClass("d-none");
 		  $modal.modal("show");
-	      var cropper = new Cropper(jQuery("#image-upload")[0],{
+        }
+	    });
+	
+	var cropper;
+	$modal.on('shown.bs.modal', function () {
+	      cropper = new Cropper($img[0],{
           autoCropArea: 0.8
-        });
+		});
+		});
 $modal.on('hidden.bs.modal', function () {
+        cropper.destroy();
+		  jQuery("#delete").removeClass("d-none");
+});
+jQuery("#save").on("click", function ()
+{
 		cropper.getCroppedCanvas().toBlob((blob) => {
 			var fd = new FormData();
 			fd.append("file", blob);
@@ -30,21 +55,29 @@ $modal.on('hidden.bs.modal', function () {
 			    },
               data: fd,
               success: function(response){
-				console.log(response);
+				var $newImg = jQuery(imageHtml);
+				$newImg.children("img").attr("src", response.thumbnailUrl).attr("data-src", response.imageUrl);
+				$newImg.appendTo($row);
               },
            });
 		});
-        cropper.destroy();
-$modal.off('hidden.bs.modal');
+        $modal.modal('hide');
       });
-	    }
-	});
-	
-	jQuery(".container").on("click", ".thumb", function ()
-	{
-	      jQuery("#image-upload").attr("src", jQuery(this).attr("data-src"));
-		  jQuery("#modal").modal("show");
-		
-	});
+
+jQuery("#delete").on("click", function ()
+{
+			jQuery.ajax({
+              url: $img.attr("src"),
+              type: 'delete',
+			beforeSend: (xhr) => {
+			        xhr.setRequestHeader(header, token);
+			    },
+              success: function(response){
+				var $oldImg = jQuery("[data-src='" + $img.attr("src") + "']");
+				$oldImg.parent().remove();
+              },
+           });
+        $modal.modal('hide');
+      });
 });
 

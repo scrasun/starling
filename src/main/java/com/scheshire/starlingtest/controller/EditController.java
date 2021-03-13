@@ -31,21 +31,6 @@ public class EditController {
 	@Autowired
 	private ImageRepo imageRepo;
 
-	@PostMapping("/gallery")
-	public GalleryInfo createGallery(Authentication authentication, @RequestParam(value = "name") String name) {
-		User user = userRepo.findByEmail(authentication.getName());
-
-		if (user == null) {
-			return (long) 0;
-		}
-
-		Gallery gallery = new Gallery();
-		gallery.setUser(user);
-		gallery.setName(name);
-
-		return new GalleryInfo(galleryRepo.save(gallery));
-	}
-
 	@PostMapping("/upload/{galleryId:.+}")
 	public ImageInfo uploadImage(@RequestParam("file") MultipartFile file, Authentication authentication,
 			@PathVariable Long galleryId) throws Exception {

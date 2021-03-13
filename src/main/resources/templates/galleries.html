@@ -7,9 +7,14 @@
     <script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body th:data-editable="${editable}">
 	<div th:each="entry : ${galleries}">
-		<a th:href="{entry.url}" th:text="${entry.name}"></a>
+		<a th:href="${entry.url}" th:text="${entry.name}"></a>
 	</div>
+	<form th:action="@{/gallery}" enctype="multipart/form-data" method="post">
+		<h2>Create new gallery</h2>
+		<input type="text" name="name" />
+		<button type="submit">Create</button>
+	</form>
 </body>
 </html>

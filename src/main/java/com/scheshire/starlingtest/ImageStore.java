@@ -46,12 +46,12 @@ public class ImageStore {
 	public void deleteImage(Image image) throws IOException
 	{
 		Files.deleteIfExists(getFileName(image));
+		imageRepo.delete(image);
 		if (image.getThumbnail() != null)
 		{
 			Files.deleteIfExists(getFileName(image.getThumbnail()));
 			imageRepo.delete(image.getThumbnail());
 		}
-		imageRepo.delete(image);
 	}
 
 	public Image saveImage(MultipartFile file, Gallery gallery) throws Exception {
@@ -75,9 +75,21 @@ public class ImageStore {
 
 		Image thumbnail = new Image();
 		thumbnail.setFile(UUID.randomUUID().toString());
+		int width = img.getWidth();
+		int height = img.getHeight();
+		if (width > height)
+		{
+			height = 100 * height / width;
+			width = 100;
+		}
+		else
+		{
+			width = 100 * width / height;
+			height = 100;
+		}
 
-		BufferedImage thumb = new BufferedImage(100, 100, BufferedImage.TYPE_INT_RGB);
-		thumb.createGraphics().drawImage(img.getScaledInstance(100, 100, BufferedImage.SCALE_SMOOTH), 0, 0, null);
+		BufferedImage thumb = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		thumb.createGraphics().drawImage(img.getScaledInstance(width, height, BufferedImage.SCALE_SMOOTH), 0, 0, null);
 		ImageIO.write(thumb, "png", getFileName(thumbnail).toFile());
 		
 		image.setThumbnail(imageRepo.save(thumbnail));
