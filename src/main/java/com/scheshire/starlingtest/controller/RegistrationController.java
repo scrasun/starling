@@ -65,7 +65,7 @@ public class RegistrationController {
 		}
 		userDto.setPassword(new BCryptPasswordEncoder().encode(userDto.getPassword()));
 		userRepo.save(userDto);
-		return "login";
+		return "registered";
 		
 	}
 }

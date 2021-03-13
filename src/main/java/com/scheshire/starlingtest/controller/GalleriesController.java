@@ -60,9 +60,10 @@ public class GalleriesController {
 	 * @return gallery list template
 	 */
 	@GetMapping("/galleries")
-	public String getAll(Model model)
+	public String getAll(Model model, Authentication authentication)
 	{
 		model.addAttribute("galleries", galleryRepo.findAll().stream().map(GalleryInfo::new).collect(Collectors.toList()));
+		model.addAttribute("editable", authentication != null);
 		return "galleries";
 	}
 
@@ -78,6 +79,7 @@ public class GalleriesController {
 		User user = userRepo.findByEmail(authentication.getName());
 		
 		model.addAttribute("galleries", user.getGalleries().stream().map(GalleryInfo::new).collect(Collectors.toList()));
+		model.addAttribute("editable", true);
 		return "galleries";
 	}
 
@@ -107,7 +109,7 @@ public class GalleriesController {
 
 		User user = userRepo.findByEmail(authentication.getName());
 		
-		if (gallery.getUser().equals(user))
+		if (gallery.getUser().getId().equals(user.getId()))
 		{
 			model.addAttribute("editable", true);
 		}

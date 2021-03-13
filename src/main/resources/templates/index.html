@@ -14,6 +14,7 @@
         <h3 th:if="${loggedin}"><a href="/my-galleries">My Galleries</a></h3>
         <h3 th:unless="${loggedin}"><a href="/registration">Register</a></h3>
         <h3 th:unless="${loggedin}"><a href="/login">Login</a></h3>
+        <h3 th:if="${loggedin}"><a href="/logout">Logout</a></h3>
     </div>
      
 </body>

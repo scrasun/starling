@@ -12,7 +12,7 @@
 <div class="row list-group text-center">
 		<a class="list-group-item" th:each="entry : ${galleries}" th:href="${entry.url}" th:text="${entry.name}"></a>
 </div>
-	<div th:if="${editable} class="row text-center">
+	<div th:if="${editable}" class="row text-center">
 	<form th:action="@{/gallery}" enctype="multipart/form-data" method="post" style="margin: 0 auto;">
 		<h2>Create new gallery</h2>
 		<input type="text" name="name" class="form-control" />
