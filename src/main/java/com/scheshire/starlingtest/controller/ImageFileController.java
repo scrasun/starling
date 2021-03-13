@@ -24,6 +24,9 @@ import com.scheshire.starlingtest.repo.GalleryRepo;
 import com.scheshire.starlingtest.repo.ImageRepo;
 import com.scheshire.starlingtest.repo.UserRepo;
 
+/**
+ * Controller for serving image files
+ */
 @Controller
 public class ImageFileController {
 	@Autowired
@@ -31,6 +34,12 @@ public class ImageFileController {
 	@Autowired
 	private ImageRepo imageRepo;
 	
+	/**
+	 * Get an image file
+	 * @param imageId Id of image
+	 * @return image resource
+	 * @throws Exception if image could not be fetched
+	 */
 	@GetMapping("/images/{imageId:.+}")
 	@ResponseBody
 	public ResponseEntity<Resource> serveImage(@PathVariable Long imageId) throws Exception {

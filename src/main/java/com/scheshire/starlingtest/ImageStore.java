@@ -24,18 +24,20 @@ import com.scheshire.starlingtest.models.Image;
 import com.scheshire.starlingtest.models.User;
 import com.scheshire.starlingtest.repo.ImageRepo;
 
+/**
+ * Image filestore service
+ */
 @Service
 public class ImageStore {
 	@Autowired
 	private ImageRepo imageRepo;
 	
 	private final Path rootLocation;
-	
-	private Path getFileName(Image image)
-	{
-		return this.rootLocation.resolve(Paths.get(image.getFile())).normalize().toAbsolutePath();
-	}
 
+	/**
+	 * Create new image store
+	 * @throws IOException if ./image_store could not be created
+	 */
 	@Autowired
 	public ImageStore() throws IOException {
 		String path = "./image_store";
@@ -43,6 +45,11 @@ public class ImageStore {
 		Files.createDirectories(rootLocation);
 	}
 	
+	/**
+	 * Removes image from store
+	 * @param image Image object to remove
+	 * @throws IOException if image file could not be deleted
+	 */
 	public void deleteImage(Image image) throws IOException
 	{
 		Files.deleteIfExists(getFileName(image));
@@ -54,6 +61,13 @@ public class ImageStore {
 		}
 	}
 
+	/**
+	 * Save file to image store and add to gallery
+	 * @param file The file to save
+	 * @param gallery The gallery to add it to
+	 * @return The new image object
+	 * @throws Exception if image could not be saved
+	 */
 	public Image saveImage(MultipartFile file, Gallery gallery) throws Exception {
 		Image image = new Image();
 		image.setGallery(gallery);
@@ -67,12 +81,13 @@ public class ImageStore {
 		Files.copy(file.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
 		
 		BufferedImage img = ImageIO.read(file.getInputStream());
+		// Save image without thumbnail if we can't parse it
 		if (img == null)
 		{
 			return imageRepo.save(image);
 		}
 		
-
+		// Generate thumbnail
 		Image thumbnail = new Image();
 		thumbnail.setFile(UUID.randomUUID().toString());
 		int width = img.getWidth();
@@ -94,10 +109,16 @@ public class ImageStore {
 		
 		image.setThumbnail(imageRepo.save(thumbnail));
 		
-		// save to generate id
+		// return image object
 		return imageRepo.save(image);
 	}
 
+	/**
+	 * Load image file
+	 * @param image The image object to load
+	 * @return The resource coresponding to the image file
+	 * @throws Exception If image could not be loaded
+	 */
 	public Resource loadImage(Image image) throws Exception {
 		Path file = getFileName(image);
 		Resource resource = new UrlResource(file.toUri());
@@ -107,5 +128,15 @@ public class ImageStore {
 		else {
 			throw new Exception("Could not read file: " + file.toString());
 		}
+	}
+	
+	/**
+	 * Get path to store image
+	 * @param image The image object
+	 * @return The path where the file is stored
+	 */
+	private Path getFileName(Image image)
+	{
+		return this.rootLocation.resolve(Paths.get(image.getFile())).normalize().toAbsolutePath();
 	}
 }

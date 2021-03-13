@@ -17,6 +17,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Image db object
+ */
 @Getter
 @Setter
 @Entity

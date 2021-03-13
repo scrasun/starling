@@ -19,6 +19,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Gallery db object
+ */
 @Getter
 @Setter
 @Entity

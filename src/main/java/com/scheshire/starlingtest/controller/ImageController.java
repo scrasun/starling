@@ -20,8 +20,11 @@ import com.scheshire.starlingtest.repo.GalleryRepo;
 import com.scheshire.starlingtest.repo.ImageRepo;
 import com.scheshire.starlingtest.repo.UserRepo;
 
+/**
+ * Rest controller for images
+ */
 @RestController
-public class EditController {
+public class ImageController {
 	@Autowired
 	private GalleryRepo galleryRepo;
 	@Autowired
@@ -31,6 +34,14 @@ public class EditController {
 	@Autowired
 	private ImageRepo imageRepo;
 
+	/**
+	 * Upload a new image
+	 * @param file Image file to upload
+	 * @param authentication User auth
+	 * @param galleryId Id of gallery to add image to
+	 * @return Information about the new image
+	 * @throws Exception if Image could not be stored
+	 */
 	@PostMapping("/upload/{galleryId:.+}")
 	public ImageInfo uploadImage(@RequestParam("file") MultipartFile file, Authentication authentication,
 			@PathVariable Long galleryId) throws Exception {
@@ -52,6 +63,12 @@ public class EditController {
 		}
 	}
 	
+	/**
+	 * Delete an image
+	 * @param authentication User auth
+	 * @param imageId Id of image to delete
+	 * @throws Exception if image could not be delted
+	 */
 	@DeleteMapping("/images/{imageId:.+}")
 	public void deleteImage(Authentication authentication, @PathVariable Long imageId) throws Exception
 	{

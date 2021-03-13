@@ -6,9 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 
+/**
+ * DTO for image info
+ */
 @Getter
 public class ImageInfo {
+	//url of image
 	private String imageUrl;
+	//url of thumbnail
 	private String thumbnailUrl;
 	
 	public ImageInfo(Image image)

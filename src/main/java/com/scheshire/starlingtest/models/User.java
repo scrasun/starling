@@ -17,6 +17,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * User db object
+ */
 @Getter
 @Setter
 @Entity

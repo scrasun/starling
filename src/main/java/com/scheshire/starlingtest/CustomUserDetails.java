@@ -7,6 +7,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.scheshire.starlingtest.models.User;
 
+/**
+ * User details for spring security
+ */
 public class CustomUserDetails implements UserDetails {
 	private User user;
     

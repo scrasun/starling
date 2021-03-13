@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import com.scheshire.starlingtest.models.User;
 import com.scheshire.starlingtest.repo.UserRepo;
 
+/**
+ * User details service for spring security
+ */
 public class CustomUserDetailsService implements UserDetailsService {
 	
 	@Autowired

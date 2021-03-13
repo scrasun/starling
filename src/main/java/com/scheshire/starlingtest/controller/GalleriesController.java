@@ -23,6 +23,9 @@ import com.scheshire.starlingtest.models.User;
 import com.scheshire.starlingtest.repo.GalleryRepo;
 import com.scheshire.starlingtest.repo.UserRepo;
 
+/**
+ * Controller for galleries
+ */
 @Controller
 public class GalleriesController {
 	@Autowired
@@ -30,6 +33,13 @@ public class GalleriesController {
 	@Autowired
 	private UserRepo userRepo;
 	
+	/**
+	 * Create new gallery
+	 * @param model Model for frontend
+	 * @param authentication User auth
+	 * @param name Name of new gallery
+	 * @return gallery template
+	 */
 	@PostMapping("/gallery")
 	public String createGallery(Model model, Authentication authentication, @RequestParam(value = "name") String name) {
 		User user = userRepo.findByEmail(authentication.getName());
@@ -44,6 +54,11 @@ public class GalleriesController {
 		return getGallery(model, authentication, galleryRepo.save(gallery).getId());
 	}
 
+	/**
+	 * Get all galleries
+	 * @param model Model for frontend
+	 * @return gallery list template
+	 */
 	@GetMapping("/galleries")
 	public String getAll(Model model)
 	{
@@ -51,6 +66,12 @@ public class GalleriesController {
 		return "galleries";
 	}
 
+	/**
+	 * Get galleries for current user
+	 * @param model Model for frontend
+	 * @param authentication User auth
+	 * @return gallery list template
+	 */
 	@GetMapping("/my-galleries")
 	public String getMine(Model model, Authentication authentication)
 	{
@@ -60,6 +81,13 @@ public class GalleriesController {
 		return "galleries";
 	}
 
+	/**
+	 * Get gallery
+	 * @param model Model for frontend
+	 * @param authentication User auth
+	 * @param galleryId Id of gallery to fetch
+	 * @return gallery template
+	 */
 	@GetMapping("/gallery/{galleryId:.+}")
 	public String getGallery(Model model, Authentication authentication, @PathVariable Long galleryId)
 	{
