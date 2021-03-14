@@ -24,7 +24,6 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "users")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
    @Setter(AccessLevel.NONE)
    @Id
